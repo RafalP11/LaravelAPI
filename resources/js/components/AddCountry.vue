@@ -1,6 +1,7 @@
 <template>
     <div>
         <h4 class="text-center">Add Country</h4>
+         <span class="w-full text-danger text-center" v-if="errors == 1">{{"You are not administrator!"}}</span>
         <div class="row">
             <div class="col-md-6">
                 <form @submit.prevent="addCountry">
@@ -23,7 +24,8 @@
 export default {
     data() {
         return {
-            country: {}
+            country: {},
+            errors:[]
         }
     },
     methods: {
@@ -33,7 +35,8 @@ export default {
                     .then(response => {
                         this.$router.push({name: 'countries'})
                     })
-                    .catch(function (error) {
+                    .catch((error) =>{
+                        this.errors = 1;
                         console.error(error);
                     });
             })

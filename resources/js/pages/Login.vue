@@ -14,6 +14,7 @@
                             <div class="form-group row">
                                 <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
                                 <div class="col-md-6">
+                                    <span class="w-full text-danger" v-if="errors.email">{{errors.email[0]}}</span>
                                     <input id="email" type="email" class="form-control" v-model="email" required
                                            autofocus autocomplete="off">
                                 </div>
@@ -22,6 +23,7 @@
                             <div class="form-group row">
                                 <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
                                 <div class="col-md-6">
+                                    <span class="w-full text-danger" v-if="errors.password">{{errors.password[0]}}</span>
                                     <input id="password" type="password" class="form-control" v-model="password"
                                            required autocomplete="off">
                                 </div>
@@ -48,7 +50,8 @@ export default {
         return {
             email: "",
             password: "",
-            error: null
+            error: null,
+            errors:[]
         }
     },
     methods: {
@@ -60,6 +63,8 @@ export default {
                     this.$axios.post('api/login', {
                         email: this.email,
                         password: this.password
+                    }).catch((error) => {
+                            this.errors = error.response.data.errors;
                     })
                         .then(response => {
                             console.log(response.data)

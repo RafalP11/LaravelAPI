@@ -2,6 +2,7 @@
     <div>
         
         <h4 class="text-center">All Countries</h4><br/>
+        <span class="w-full text-danger text-center" v-if="errors == 1">{{"You are not administrator!"}}</span>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -25,6 +26,7 @@
             </tbody>
         </table>
         <button type="button" class="btn btn-info" @click="this.$router.push('/countries/add')">Add Country</button>
+        <span class="w-full text-danger" v-if="errors == 1">{{"You are not administrator!"}}</span>
     </div>
 </template>
 
@@ -33,7 +35,8 @@ export default {
     data() {
         return {
             countries: [],
-            id_admin: []
+            id_admin: [],
+            errors: []
         }
     },
     created() {
@@ -55,7 +58,8 @@ export default {
                         let i = this.countries.map(item => item.id).indexOf(id); // find index of your object
                         this.countries.splice(i, 1)
                     })
-                    .catch(function (error) {
+                    .catch((error) =>{
+                        this.errors = 1;
                         console.error(error);
                     });
             })

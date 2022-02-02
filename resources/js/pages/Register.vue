@@ -14,6 +14,7 @@
                             <div class="form-group row">
                                 <label for="name" class="col-sm-4 col-form-label text-md-right">Name</label>
                                 <div class="col-md-6">
+                                    <span class="w-full text-danger" v-if="errors.name">{{errors.name[0]}}</span>
                                     <input id="name" type="email" class="form-control" v-model="name" required
                                            autofocus autocomplete="off">
                                 </div>
@@ -22,6 +23,7 @@
                             <div class="form-group row">
                                 <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
                                 <div class="col-md-6">
+                                    <span class="w-full text-danger" v-if="errors.email">{{errors.email[0]}}</span>
                                     <input id="email" type="email" class="form-control" v-model="email" required
                                            autofocus autocomplete="off">
                                 </div>
@@ -30,6 +32,7 @@
                             <div class="form-group row">
                                 <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
                                 <div class="col-md-6">
+                                    <span class="w-full text-danger" v-if="errors.password">{{errors.password[0]}}</span>
                                     <input id="password" type="password" class="form-control" v-model="password"
                                            required autocomplete="off">
                                 </div>
@@ -57,7 +60,8 @@ export default {
             name: "",
             email: "",
             password: "",
-            error: null
+            error:null,
+            errors:[]
         }
     },
     methods: {
@@ -68,17 +72,17 @@ export default {
                     axios.post('api/register', {
                         name: this.name,
                         email: this.email,
-                        password: this.password
+                        password: this.password,
+                    }).catch((error) => {
+                            this.errors = error.response.data.errors;
                     })
                         .then(response => {
                             if (response.data.success) {
                                 window.location.href = "/login"
                             } else {
-                                this.error = response.data.message
+                                this.error = response.data.message;
+                                console.log(this.errors);
                             }
-                        })
-                        .catch(function (error) {
-                            console.error(error);
                         });
                 })
             }
